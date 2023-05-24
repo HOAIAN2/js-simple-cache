@@ -9,8 +9,9 @@ const cache = new Cache('userID', 10000)
 ```
 ### options
 
-* First aggrument is unique `key`, whe you `set` new item, it auto set with that `key` for you and you can access later with `get`
+* First aggrument is unique `key`, when you `set` new item, it auto set with that `key` for you and you can access later with `get`
 * Second arrgrument is limit size, it help cache to auto delete old item (first item) when cache reach maximum size limit (but you can set undefined to have no limit)
+* Note: This only accept cache object has a props that you provide when init
 
 ## API provide
 
