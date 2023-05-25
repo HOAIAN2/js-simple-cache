@@ -1,10 +1,12 @@
 # js-simple-cache
 
-A simple memory cache support auto remove when reach limit size base on ES6 Map()
+A simple caching object data base on ES6 Map() that support auto invalidate cache when reach maximum size
 
 ## Install
 
-`npm i js-simple-cache`
+```
+npm i js-simple-cache
+```
 
 ## Usage
 
@@ -45,7 +47,7 @@ cache.remove(1)
 cache.clear()
 ```
 
-## findKey
+### find a key
 
 ```js
 cache.set({ userID: 1, username: 'HOAI AN' })
@@ -58,6 +60,11 @@ const key = cache.findKey(item => item.username === 'HOAI AN3')
 console.log(key) // 4
 ```
 
+### filter
+
+```js
+const key = cache.filter(item => item.username.includes('HOAIAN'))
+```
 * You can convert to Object / Array to use other prototype
 
 ### Export to Object / Array

@@ -4,8 +4,9 @@ class Cache {
     #key
     #limit
     #data
-    constructor(key = '', limit) {
+    constructor(key = '', limit = 100000) {
         if (typeof key !== 'string') throw new Error('Key must be a string')
+        if (key.trim() === '') throw new Error('Key cannot be empty')
         if (limit) {
             if (!Number.isInteger(limit) || limit < 1) throw new Error('Limit must be integer and greater than 1')
             this.#limit = limit
@@ -44,6 +45,15 @@ class Cache {
             }
         }
         return key
+    }
+    filter(callback) {
+        let map = this.#data.values()
+        const array = []
+        for (let index = 0; index < this.size; index++) {
+            let value = map.next()
+            if (callback(value.value)) array.push(value.value)
+        }
+        return array
     }
     toObject() {
         return Object.fromEntries(this.#data)
