@@ -2,9 +2,14 @@
 
 A simple memory cache support auto remove when reach limit size base on ES6 Map()
 
+## Install
+
+`npm i js-simple-cache`
+
 ## Usage
 
 ```js
+const Cache = require('js-simple-cache')
 const cache = new Cache('userID', 10000)
 ```
 ### options
