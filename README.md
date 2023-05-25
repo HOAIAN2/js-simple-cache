@@ -40,6 +40,21 @@ cache.remove(1)
 cache.clear()
 ```
 
+## findKey
+
+```js
+cache.set({ userID: 1, username: 'HOAI AN' })
+cache.set({ userID: 2, username: 'HOAI AN1' })
+cache.set({ userID: 3, username: 'HOAI AN2' })
+cache.set({ userID: 4, username: 'HOAI AN3' })
+cache.set({ userID: 5, username: 'HOAI AN4' })
+cache.set({ userID: 6, username: 'HOAI AN5' })
+const key = cache.findKey(item => item.username === 'HOAI AN3')
+console.log(key) // 4
+```
+
+* You can convert to Object / Array to use other prototype
+
 ### Export to Object / Array
 
 ```js

@@ -31,6 +31,20 @@ class Cache {
     clear() {
         this.#data.clear()
     }
+    findKey(callback) {
+        let map = this.#data.values()
+        let key = undefined
+        let found = false
+        for (let index = 0; index < this.size; index++) {
+            let value = map.next()
+            found = callback(value.value)
+            if (found) {
+                key = value.value[this.#key]
+                break
+            }
+        }
+        return key
+    }
     toObject() {
         return Object.fromEntries(this.#data)
     }
