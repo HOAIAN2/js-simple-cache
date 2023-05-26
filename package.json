@@ -9,7 +9,7 @@
     "url": "git+https://github.com/HOAIAN2/js-simple-cache.git"
   },
   "keywords": [
-    "cache"
+    "cache, Map, auto invalidate cache, caching"
   ],
   "author": "HOAI AN",
   "license": "ISC",

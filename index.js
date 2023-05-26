@@ -72,14 +72,14 @@ class Cache {
         return JSON.stringify(this.toObject())
     }
     #findLeastUse() {
-        let map = this.#useCount.values()
+        let map = this.#useCount.entries()
         let key = undefined
         let minimum = Infinity
         for (let index = 0; index < this.size; index++) {
             let value = map.next()
-            if (value.value < minimum) {
+            if (value.value[1] < minimum) {
                 minimum = value.value[1]
-                key = value[0]
+                key = value.value[0]
             }
         }
         return key
