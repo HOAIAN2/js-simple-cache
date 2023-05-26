@@ -16,8 +16,19 @@ class Cache {
         this.#data = new Map()
         this.#key = key
     }
+    get key() {
+        return this.#key
+    }
     get size() {
         return this.#data.size
+    }
+    get limit() {
+        return this.#limit
+    }
+    set limit(value) {
+        if (!Number.isInteger(value) || value < 1) throw new Error('Limit must be integer and greater than 1')
+        if (value < this.size) throw new Error('New limit value must greater than cache size')
+        this.#limit = value
     }
     set(item) {
         if (typeof item !== 'object') throw new Error('item must be an object')

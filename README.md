@@ -22,20 +22,24 @@ const cache = new Cache('userID', 10000)
 
 ## API provide
 
-### Store and item
+### Getter and Setter
+* Getter only: key, size
+* Getter and Setter: limit (Integer and greater than current size)
+
+### Store an item
 
 ```js
 cache.set({userID:1, username: 'HOAI AN'})
 ```
 * This is base on ES6 Map so if you put same key it gonna replace old item
 
-### Get and item
+### Get an item
 
 ```js
 const user = cache.get(1)
 console.log(user) // {userID:1, username: 'HOAI AN'}
 ```
-### Remove and item
+### Remove an item
 
 ```js
 cache.remove(1)
