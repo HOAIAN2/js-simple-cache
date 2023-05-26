@@ -4,12 +4,14 @@ class Cache {
     #key
     #limit
     #data
-    constructor(key = '', limit = 100000) {
+    #useCount
+    constructor(key = '', limit = undefined) {
         if (typeof key !== 'string') throw new Error('Key must be a string')
         if (key.trim() === '') throw new Error('Key cannot be empty')
         if (limit) {
             if (!Number.isInteger(limit) || limit < 1) throw new Error('Limit must be integer and greater than 1')
             this.#limit = limit
+            this.#useCount = new Map()
         }
         this.#data = new Map()
         this.#key = key
@@ -20,10 +22,12 @@ class Cache {
     set(item) {
         if (typeof item !== 'object') throw new Error('item must be an object')
         if (!Object.hasOwn(item, this.#key)) throw new Error(`item must contain key: ${this.#key}`)
-        if (this.#limit && this.size === this.#limit) this.#data.delete(this.#data.entries().next().value[0])
+        if (this.#limit && this.size === this.#limit) this.#removeLeastUse()
         this.#data.set(item[this.#key], item)
+        if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
     get(key) {
+        if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
         return this.#data.get(key)
     }
     remove(key) {
@@ -66,6 +70,24 @@ class Cache {
     }
     toJSONObject() {
         return JSON.stringify(this.toObject())
+    }
+    #findLeastUse() {
+        let map = this.#useCount.values()
+        let key = undefined
+        let minimum = Infinity
+        for (let index = 0; index < this.size; index++) {
+            let value = map.next()
+            if (value.value < minimum) {
+                minimum = value.value[1]
+                key = value[0]
+            }
+        }
+        return key
+    }
+    #removeLeastUse() {
+        const key = this.#findLeastUse()
+        this.#data.delete(key)
+        this.#useCount.delete(key)
     }
 }
 

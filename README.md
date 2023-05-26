@@ -1,6 +1,6 @@
 # js-simple-cache
 
-A simple caching object data base on ES6 Map() that support auto invalidate cache when reach maximum size
+A simple caching object data base on ES6 Map() that support auto invalidate cache when reach maximum size. This'll work if all object you wanna cache have a unique `key` like when you cache user data, all object have a `key` like `userID`
 
 ## Install
 
@@ -17,7 +17,7 @@ const cache = new Cache('userID', 10000)
 ### options
 
 * First aggrument is unique `key`, when you `set` new item, it auto set with that `key` for you and you can access later with `get`
-* Second arrgrument is limit size, it help cache to auto delete old item (first item) when cache reach maximum size limit (but you can set undefined to have no limit)
+* Second arrgrument is limit size, it help cache to auto delete least use when cache reach maximum size limit (but you can set undefined to have no limit)
 * Note: This only accept cache object has a props that you provide when init
 
 ## API provide
