@@ -45,13 +45,14 @@ class Cache {
     }
     get(key) {
         if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
-        return this.#data.get(key)
+        return structuredClone(this.#data.get(key))
     }
     remove(key) {
         if (this.#limit && this.#data.has(key)) this.#useCount.delete(key)
-        this.#data.delete(key)
+        if (this.#data.has(key)) this.#data.delete(key)
     }
     clear() {
+        if (this.#limit) this.#useCount.clear()
         this.#data.clear()
     }
     findKey(callback) {
