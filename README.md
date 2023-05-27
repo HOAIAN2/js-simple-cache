@@ -27,9 +27,9 @@ const cache = new Cache('userID', 10000)
 * Getter and Setter: limit (Integer and greater than current size)
 
 ### Store an item
-
+* First aggrument is the object that contain `key`, second aggrument is a timer (miliseconds) that will help you auto remove item after `X` miliseconds.
 ```js
-cache.set({userID:1, username: 'HOAI AN'})
+cache.set({userID:1, username: 'HOAI AN'}, 10000) // item will auto remove after 10 seconds
 ```
 * This is base on ES6 Map so if you put same key it gonna replace old item
 

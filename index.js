@@ -30,11 +30,17 @@ class Cache {
         if (value < this.size) throw new Error('New limit value must greater than cache size')
         this.#limit = value
     }
-    set(item) {
+    set(item, expiryTime = undefined) {
         if (typeof item !== 'object') throw new Error('item must be an object')
         if (!Object.hasOwn(item, this.#key)) throw new Error(`item must contain key: ${this.#key}`)
+        if (expiryTime) {
+            if (!this.#isValidNumber(expiryTime)) throw new Error('expiryTime must me a number and greater than 0')
+            setTimeout(() => {
+                this.remove(item[this.#key])
+            }, expiryTime)
+        }
         if (this.#limit && this.size === this.#limit) this.#removeLeastUse()
-        this.#data.set(item[this.#key], item)
+        this.#data.set(item[this.#key], structuredClone(item))
         if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
     get(key) {
@@ -42,6 +48,7 @@ class Cache {
         return this.#data.get(key)
     }
     remove(key) {
+        if (this.#limit && this.#data.has(key)) this.#useCount.delete(key)
         this.#data.delete(key)
     }
     clear() {
@@ -99,6 +106,11 @@ class Cache {
         const key = this.#findLeastUse()
         this.#data.delete(key)
         this.#useCount.delete(key)
+    }
+    #isValidNumber(number) {
+        if (typeof number !== 'number') return false
+        if (number <= 0) return false
+        return true
     }
 }
 
