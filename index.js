@@ -40,12 +40,12 @@ class Cache {
             }, expiryTime)
         }
         if (this.#limit && this.size === this.#limit) this.#removeLeastUse()
-        this.#data.set(item[this.#key], structuredClone(item))
+        this.#data.set(item[this.#key], item)
         if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
     get(key) {
         if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
-        return structuredClone(this.#data.get(key))
+        return this.#data.get(key)
     }
     remove(key) {
         if (this.#limit && this.#data.has(key)) this.#useCount.delete(key)
