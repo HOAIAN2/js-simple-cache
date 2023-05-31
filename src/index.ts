@@ -1,11 +1,11 @@
 "use strict"
 
-class Cache {
-    #key
-    #limit
-    #data
-    #useCount
-    constructor(key = '', limit = undefined) {
+export class Cache {
+    #key: any
+    #limit: number | undefined
+    #data: Map<any, Object>
+    #useCount: Map<any, number>
+    constructor(key: string, limit?: number | undefined) {
         if (typeof key !== 'string') throw new Error('Key must be a string')
         if (key.trim() === '') throw new Error('Key cannot be empty')
         if (limit) {
@@ -30,7 +30,7 @@ class Cache {
         if (value < this.size) throw new Error('New limit value must greater than cache size')
         this.#limit = value
     }
-    set(item, expiryTime = undefined) {
+    set(item: Object, expiryTime?: number | undefined) {
         if (typeof item !== 'object') throw new Error('item must be an object')
         if (!Object.hasOwn(item, this.#key)) throw new Error(`item must contain key: ${this.#key}`)
         if (expiryTime) {
@@ -43,11 +43,11 @@ class Cache {
         this.#data.set(item[this.#key], item)
         if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
-    get(key) {
+    get(key: any) {
         if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
         return this.#data.get(key)
     }
-    remove(key) {
+    remove(key: any) {
         if (this.#limit && this.#data.has(key)) this.#useCount.delete(key)
         if (this.#data.has(key)) this.#data.delete(key)
     }
@@ -55,7 +55,7 @@ class Cache {
         if (this.#limit) this.#useCount.clear()
         this.#data.clear()
     }
-    findKey(callback) {
+    findKey(callback: Function) {
         let map = this.#data.values()
         let key = undefined
         let found = false
@@ -69,7 +69,7 @@ class Cache {
         }
         return key
     }
-    filter(callback) {
+    filter(callback: Function) {
         let map = this.#data.values()
         const array = []
         for (let index = 0; index < this.size; index++) {
@@ -108,11 +108,9 @@ class Cache {
         this.#data.delete(key)
         this.#useCount.delete(key)
     }
-    #isValidNumber(number) {
+    #isValidNumber(number: number) {
         if (typeof number !== 'number') return false
         if (number <= 0) return false
         return true
     }
 }
-
-module.exports = Cache

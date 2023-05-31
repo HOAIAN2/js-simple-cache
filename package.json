@@ -1,9 +1,12 @@
 {
   "name": "js-simple-cache",
-  "version": "1.0.7",
+  "version": "1.2.0",
   "description": "\"A simple caching object data base on ES6 Map() that support auto invalidate cache when reach maximum size",
-  "main": "index.js",
-  "scripts": {},
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HOAIAN2/js-simple-cache.git"
@@ -19,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/HOAIAN2/js-simple-cache/issues"
   },
-  "homepage": "https://github.com/HOAIAN2/js-simple-cache#readme"
+  "homepage": "https://github.com/HOAIAN2/js-simple-cache#readme",
+  "dependencies": {
+    "typescript": "^5.0.4"
+  }
 }

@@ -11,7 +11,15 @@ npm i js-simple-cache
 ## Usage
 
 ```js
+// v1.0.7
 const Cache = require('js-simple-cache')
+const cache = new Cache('userID', 10000)
+// v1.2.0
+// Node module
+const { Cache } = require('js-simple-cache')
+const cache = new Cache('userID', 10000)
+// ES module
+import { Cache } from 'js-simple-cache'
 const cache = new Cache('userID', 10000)
 ```
 ### options
