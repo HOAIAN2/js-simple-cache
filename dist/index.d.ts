@@ -1,7 +1,7 @@
 export declare class Cache {
     #private;
     constructor(key: string, limit?: number | undefined);
-    get key(): any;
+    get key(): string;
     get size(): number;
     get limit(): number;
     set limit(value: number);
@@ -15,4 +15,5 @@ export declare class Cache {
     toArray(): Object[];
     toJSONArray(): string;
     toJSONObject(): string;
+    search(searchValue: string, searchFields: string[], nocase?: boolean): Object[];
 }

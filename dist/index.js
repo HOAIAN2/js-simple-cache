@@ -71,10 +71,11 @@ class Cache {
         this.#data.clear();
     }
     findKey(callback) {
-        let map = this.#data.values();
+        const map = this.#data.values();
         let key = undefined;
         let found = false;
-        for (let index = 0; index < this.size; index++) {
+        const size = this.size;
+        for (let index = 0; index < size; index++) {
             let value = map.next();
             found = callback(value.value);
             if (found) {
@@ -85,9 +86,10 @@ class Cache {
         return key;
     }
     filter(callback) {
-        let map = this.#data.values();
+        const map = this.#data.values();
         const array = [];
-        for (let index = 0; index < this.size; index++) {
+        const size = this.size;
+        for (let index = 0; index < size; index++) {
             let value = map.next();
             if (callback(value.value))
                 array.push(value.value);
@@ -106,8 +108,33 @@ class Cache {
     toJSONObject() {
         return JSON.stringify(this.toObject());
     }
+    search(searchValue, searchFields, nocase = false) {
+        if (nocase)
+            searchValue = searchValue.toLocaleLowerCase();
+        const result = [];
+        const map = this.#data.values();
+        const size = this.size;
+        for (let index = 0; index < size; index++) {
+            let value = map.next();
+            const keys = Object.keys(value.value).filter(key => searchFields.includes(key));
+            for (let index = 0; index < keys.length; index++) {
+                const valueOfKey = value.value[keys[index]];
+                if (typeof valueOfKey !== 'string')
+                    continue;
+                if (nocase) {
+                    if (valueOfKey.toLocaleLowerCase().includes(searchValue))
+                        result.push(value.value);
+                }
+                else {
+                    if (valueOfKey.includes(searchValue))
+                        result.push(value.value);
+                }
+            }
+        }
+        return result;
+    }
     #findLeastUse() {
-        let map = this.#useCount.entries();
+        const map = this.#useCount.entries();
         let key = undefined;
         let minimum = Infinity;
         for (let index = 0; index < this.size; index++) {

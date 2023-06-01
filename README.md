@@ -79,6 +79,14 @@ const key = cache.filter(item => item.username.includes('HOAIAN'))
 ```
 * You can convert to Object / Array to use other prototype
 
+### search
+
+* first arrgument is `searchvalue`, second arrgument is a list of field that will search, third arrgument is `nocase`, If `true`, search will ignore upper case or lower case
+
+```js
+const result = cache.search('search value', ['field1, field2'], true)
+```
+
 ### Export to Object / Array
 
 ```js
