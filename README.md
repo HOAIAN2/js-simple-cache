@@ -81,10 +81,14 @@ const key = cache.filter(item => item.username.includes('HOAIAN'))
 
 ### search
 
-* first arrgument is `searchvalue`, second arrgument is a list of field that will search, third arrgument is `nocase`, If `true`, search will ignore upper case or lower case
-
 ```js
-const result = cache.search('search value', ['field1, field2'], true)
+const options = {
+    searchValue: string;
+    searchFields: string[]; // specified object field to search ( if you have nested object or array, enable deepScan)
+    nocase?: boolean; // set true to match whatever 
+    deepScan?: boolean; // set true to enable nested object scan
+}
+const result = cache.search(options)
 ```
 
 ### Export to Object / Array

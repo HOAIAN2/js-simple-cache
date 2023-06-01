@@ -1,5 +1,12 @@
 "use strict"
+import flat from 'flat'
 
+interface SearchOptions {
+    searchValue: string,
+    searchFields: string[],
+    nocase?: boolean,
+    deepScan?: boolean
+}
 export class Cache {
     #key: string
     #limit: number | undefined
@@ -92,23 +99,25 @@ export class Cache {
     toJSONObject() {
         return JSON.stringify(this.toObject())
     }
-    search(searchValue: string, searchFields: string[], nocase: boolean = false) {
-        if (nocase) searchValue = searchValue.toLocaleLowerCase()
+    search(options: SearchOptions) {
+        if (options.searchValue.trim() === '') return
+        if (options.nocase) options.searchValue = options.searchValue.toLocaleLowerCase()
         const result: Object[] = []
         const map = this.#data.values()
         const size = this.size
         for (let index = 0; index < size; index++) {
             let value = map.next()
-            const keys = Object.keys(value.value).filter(key => searchFields.includes(key))
-            for (let index = 0; index < keys.length; index++) {
-                const valueOfKey: string = value.value[keys[index]]
-                if (typeof valueOfKey !== 'string') continue
-                if (nocase) {
-                    if (valueOfKey.toLocaleLowerCase().includes(searchValue)) result.push(value.value)
-                }
-                else {
-                    if (valueOfKey.includes(searchValue)) result.push(value.value)
-                }
+            if (options.deepScan) {
+                const object = flat(value.value)
+                const keys = Object.keys(object).filter(key => {
+                    return options.searchFields.some(field => key.includes(field))
+                })
+                if (this.#isMatchValue(options.searchValue, object, keys, options.nocase)) result.push(value.value)
+            }
+            else {
+                const object = value.value
+                const keys = Object.keys(object).filter(key => options.searchFields.includes(key))
+                if (this.#isMatchValue(options.searchValue, object, keys, options.nocase)) result.push(value.value)
             }
         }
         return result
@@ -135,5 +144,19 @@ export class Cache {
         if (typeof number !== 'number') return false
         if (number <= 0) return false
         return true
+    }
+    #isMatchValue(value: string, object: Object, keys: string[], nocase: boolean) {
+        const unaccept = [String(null), String(undefined)]
+        for (let index = 0; index < keys.length; index++) {
+            const valueOfKey: string = String(object[keys[index]])
+            if (unaccept.includes(valueOfKey)) continue
+            if (nocase) {
+                if (valueOfKey.toLocaleLowerCase().includes(value)) return true
+            }
+            else {
+                if (valueOfKey.includes(value)) return true
+            }
+        }
+        return false
     }
 }

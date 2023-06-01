@@ -1,3 +1,9 @@
+interface SearchOptions {
+    searchValue: string;
+    searchFields: string[];
+    nocase?: boolean;
+    deepScan?: boolean;
+}
 export declare class Cache {
     #private;
     constructor(key: string, limit?: number | undefined);
@@ -15,5 +21,6 @@ export declare class Cache {
     toArray(): Object[];
     toJSONArray(): string;
     toJSONObject(): string;
-    search(searchValue: string, searchFields: string[], nocase?: boolean): Object[];
+    search(options: SearchOptions): Object[];
 }
+export {};

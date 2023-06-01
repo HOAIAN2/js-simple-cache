@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cache = void 0;
+const flat_1 = __importDefault(require("flat"));
 class Cache {
     #key;
     #limit;
@@ -108,27 +112,29 @@ class Cache {
     toJSONObject() {
         return JSON.stringify(this.toObject());
     }
-    search(searchValue, searchFields, nocase = false) {
-        if (nocase)
-            searchValue = searchValue.toLocaleLowerCase();
+    search(options) {
+        if (options.searchValue.trim() === '')
+            return;
+        if (options.nocase)
+            options.searchValue = options.searchValue.toLocaleLowerCase();
         const result = [];
         const map = this.#data.values();
         const size = this.size;
         for (let index = 0; index < size; index++) {
             let value = map.next();
-            const keys = Object.keys(value.value).filter(key => searchFields.includes(key));
-            for (let index = 0; index < keys.length; index++) {
-                const valueOfKey = value.value[keys[index]];
-                if (typeof valueOfKey !== 'string')
-                    continue;
-                if (nocase) {
-                    if (valueOfKey.toLocaleLowerCase().includes(searchValue))
-                        result.push(value.value);
-                }
-                else {
-                    if (valueOfKey.includes(searchValue))
-                        result.push(value.value);
-                }
+            if (options.deepScan) {
+                const object = (0, flat_1.default)(value.value);
+                const keys = Object.keys(object).filter(key => {
+                    return options.searchFields.some(field => key.includes(field));
+                });
+                if (this.#isMatchValue(options.searchValue, object, keys, options.nocase))
+                    result.push(value.value);
+            }
+            else {
+                const object = value.value;
+                const keys = Object.keys(object).filter(key => options.searchFields.includes(key));
+                if (this.#isMatchValue(options.searchValue, object, keys, options.nocase))
+                    result.push(value.value);
             }
         }
         return result;
@@ -157,6 +163,23 @@ class Cache {
         if (number <= 0)
             return false;
         return true;
+    }
+    #isMatchValue(value, object, keys, nocase) {
+        const unaccept = [String(null), String(undefined)];
+        for (let index = 0; index < keys.length; index++) {
+            const valueOfKey = String(object[keys[index]]);
+            if (unaccept.includes(valueOfKey))
+                continue;
+            if (nocase) {
+                if (valueOfKey.toLocaleLowerCase().includes(value))
+                    return true;
+            }
+            else {
+                if (valueOfKey.includes(value))
+                    return true;
+            }
+        }
+        return false;
     }
 }
 exports.Cache = Cache;
