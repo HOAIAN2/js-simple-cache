@@ -45,6 +45,8 @@ class Cache {
             throw new Error('item must be an object');
         if (!Object.hasOwn(item, this.#key))
             throw new Error(`item must contain key: ${this.#key}`);
+        if (!this.#isValidValue(item[this.#key]))
+            throw new Error('value must be a number, string or bigint');
         if (expiryTime) {
             if (!this.#isValidNumber(expiryTime))
                 throw new Error('expiryTime must me a number and greater than 0');
@@ -180,6 +182,10 @@ class Cache {
             }
         }
         return false;
+    }
+    #isValidValue(value) {
+        const accept = ['string', 'number', 'bigint'];
+        return accept.includes(typeof value);
     }
 }
 exports.Cache = Cache;

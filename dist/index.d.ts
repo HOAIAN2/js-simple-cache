@@ -6,14 +6,14 @@ interface SearchOptions {
 }
 export declare class Cache {
     #private;
-    constructor(key: string, limit?: number | undefined);
+    constructor(key: string, limit?: number);
     get key(): string;
     get size(): number;
     get limit(): number;
     set limit(value: number);
-    set(item: Object, expiryTime?: number | undefined): void;
-    get(key: any): Object;
-    remove(key: any): void;
+    set(item: Object, expiryTime?: number): void;
+    get(key: string | number | bigint): Object;
+    remove(key: string | number | bigint): void;
     clear(): void;
     findKey(callback: Function): any;
     filter(callback: Function): any[];

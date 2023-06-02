@@ -2,9 +2,9 @@
 import flat from 'flat'
 
 interface SearchOptions {
-    searchValue: string,
-    searchFields: string[],
-    nocase?: boolean,
+    searchValue: string;
+    searchFields: string[];
+    nocase?: boolean;
     deepScan?: boolean
 }
 export class Cache {
@@ -12,7 +12,7 @@ export class Cache {
     #limit: number | undefined
     #data: Map<any, Object>
     #useCount: Map<any, number>
-    constructor(key: string, limit?: number | undefined) {
+    constructor(key: string, limit?: number) {
         if (typeof key !== 'string') throw new Error('Key must be a string')
         if (key.trim() === '') throw new Error('Key cannot be empty')
         if (limit) {
@@ -37,9 +37,10 @@ export class Cache {
         if (value < this.size) throw new Error('New limit value must greater than cache size')
         this.#limit = value
     }
-    set(item: Object, expiryTime?: number | undefined) {
+    set(item: Object, expiryTime?: number) {
         if (typeof item !== 'object') throw new Error('item must be an object')
         if (!Object.hasOwn(item, this.#key)) throw new Error(`item must contain key: ${this.#key}`)
+        if (!this.#isValidValue(item[this.#key])) throw new Error('value must be a number, string or bigint')
         if (expiryTime) {
             if (!this.#isValidNumber(expiryTime)) throw new Error('expiryTime must me a number and greater than 0')
             setTimeout(() => {
@@ -50,11 +51,11 @@ export class Cache {
         this.#data.set(item[this.#key], item)
         if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
-    get(key: any) {
+    get(key: string | number | bigint) {
         if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
         return this.#data.get(key)
     }
-    remove(key: any) {
+    remove(key: string | number | bigint) {
         if (this.#limit && this.#data.has(key)) this.#useCount.delete(key)
         if (this.#data.has(key)) this.#data.delete(key)
     }
@@ -158,5 +159,9 @@ export class Cache {
             }
         }
         return false
+    }
+    #isValidValue(value: any) {
+        const accept = ['string', 'number', 'bigint']
+        return accept.includes(typeof value)
     }
 }

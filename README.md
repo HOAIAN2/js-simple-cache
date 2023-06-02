@@ -83,10 +83,10 @@ const key = cache.filter(item => item.username.includes('HOAIAN'))
 
 ```js
 const options = {
-    searchValue: string;
-    searchFields: string[]; // specified object field to search ( if you have nested object or array, enable deepScan)
-    nocase?: boolean; // set true to match whatever 
-    deepScan?: boolean; // set true to enable nested object scan
+    searchValue: 'string',
+    searchFields: ['field1', 'field2'], // specified object field to search ( if you have nested object or array, enable deepScan)
+    nocase: true, // optional set true to match whatever 
+    deepScan: true // optional set true to enable nested object scan
 }
 const result = cache.search(options)
 ```
