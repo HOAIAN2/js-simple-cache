@@ -1,6 +1,6 @@
 {
   "name": "js-simple-cache",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "\"A simple caching object data base on ES6 Map() that support auto invalidate cache when reach maximum size",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

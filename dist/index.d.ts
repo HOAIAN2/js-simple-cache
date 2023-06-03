@@ -12,7 +12,8 @@ export declare class Cache {
     get limit(): number;
     set limit(value: number);
     set(item: Object, expiryTime?: number): void;
-    get(key: string | number | bigint): Object;
+    get(key: string | number | bigint): Object | undefined;
+    has(key: string | number | bigint): boolean;
     remove(key: string | number | bigint): void;
     clear(): void;
     findKey(callback: Function): any;

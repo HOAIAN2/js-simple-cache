@@ -65,6 +65,9 @@ class Cache {
             this.#useCount.set(key, this.#useCount.get(key) + 1);
         return this.#data.get(key);
     }
+    has(key) {
+        return this.#data.has(key);
+    }
     remove(key) {
         if (this.#limit && this.#data.has(key))
             this.#useCount.delete(key);

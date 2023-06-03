@@ -22,6 +22,7 @@ const cache = new Cache('userID', 10000)
 import { Cache } from 'js-simple-cache'
 const cache = new Cache('userID', 10000)
 ```
+
 ### options
 
 * First aggrument is unique `key`, when you `set` new item, it auto set with that `key` for you and you can access later with `get`
@@ -31,14 +32,18 @@ const cache = new Cache('userID', 10000)
 ## API provide
 
 ### Getter and Setter
+
 * Getter only: key, size
 * Getter and Setter: limit (Integer and greater than current size)
 
 ### Store an item
+
 * First aggrument is the object that contain `key`, second aggrument is a timer (miliseconds) that will help you auto remove item after `X` miliseconds.
+
 ```js
 cache.set({userID:1, username: 'HOAI AN'}, 10000) // item will auto remove after 10 seconds
 ```
+
 * This is base on ES6 Map so if you put same key it gonna replace old item
 
 ### Get an item
@@ -47,6 +52,13 @@ cache.set({userID:1, username: 'HOAI AN'}, 10000) // item will auto remove after
 const user = cache.get(1)
 console.log(user) // {userID:1, username: 'HOAI AN'}
 ```
+
+* If you using typescript and you cache object create by a class, you can use `as` like this.
+
+```ts
+const order = cache.get(110230) as Order // Order is your class
+```
+
 ### Remove an item
 
 ```js
@@ -72,11 +84,18 @@ const key = cache.findKey(item => item.username === 'HOAI AN3')
 console.log(key) // 4
 ```
 
+### check that cache have a key
+
+```js
+cache.has(2)
+```
+
 ### filter
 
 ```js
 const key = cache.filter(item => item.username.includes('HOAIAN'))
 ```
+
 * You can convert to Object / Array to use other prototype
 
 ### search

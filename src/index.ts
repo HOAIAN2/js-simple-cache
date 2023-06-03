@@ -51,9 +51,12 @@ export class Cache {
         this.#data.set(item[this.#key], item)
         if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
-    get(key: string | number | bigint) {
+    get(key: string | number | bigint): Object | undefined {
         if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
         return this.#data.get(key)
+    }
+    has(key: string | number | bigint) {
+        return this.#data.has(key)
     }
     remove(key: string | number | bigint) {
         if (this.#limit && this.#data.has(key)) this.#useCount.delete(key)
