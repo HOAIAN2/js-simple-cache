@@ -10,8 +10,8 @@ interface SearchOptions {
 export class Cache {
     #key: string
     #limit: number | undefined
-    #data: Map<any, Object>
-    #useCount: Map<any, number>
+    #data: Map<string | number | bigint, object>
+    #useCount: Map<string | number | bigint, number>
     constructor(key: string, limit?: number) {
         if (typeof key !== 'string') throw new Error('Key must be a string')
         if (key.trim() === '') throw new Error('Key cannot be empty')
@@ -37,7 +37,7 @@ export class Cache {
         if (value < this.size) throw new Error('New limit value must greater than cache size')
         this.#limit = value
     }
-    set(item: Object, expiryTime?: number) {
+    set(item: object, expiryTime?: number) {
         if (typeof item !== 'object') throw new Error('item must be an object')
         if (!Object.hasOwn(item, this.#key)) throw new Error(`item must contain key: ${this.#key}`)
         if (!this.#isValidValue(item[this.#key])) throw new Error('value must be a number, string or bigint')
@@ -51,7 +51,7 @@ export class Cache {
         this.#data.set(item[this.#key], item)
         if (this.#limit) this.#useCount.set(item[this.#key], 0)
     }
-    get(key: string | number | bigint): Object | undefined {
+    get(key: string | number | bigint): object | undefined {
         if (this.#limit && this.#data.has(key)) this.#useCount.set(key, this.#useCount.get(key) + 1)
         return this.#data.get(key)
     }
@@ -66,7 +66,7 @@ export class Cache {
         if (this.#limit) this.#useCount.clear()
         this.#data.clear()
     }
-    findKey(callback: Function) {
+    findKey(callback: Function): string | number | bigint | undefined {
         const map = this.#data.values()
         let key = undefined
         let found = false
@@ -81,7 +81,7 @@ export class Cache {
         }
         return key
     }
-    filter(callback: Function) {
+    filter(callback: Function): object[] {
         const map = this.#data.values()
         const array = []
         const size = this.size
@@ -91,10 +91,10 @@ export class Cache {
         }
         return array
     }
-    toObject() {
+    toObject(): object {
         return Object.fromEntries(this.#data)
     }
-    toArray() {
+    toArray(): object[] {
         return Array.from(this.#data).map(item => item[1])
     }
     toJSONArray() {
@@ -106,7 +106,7 @@ export class Cache {
     search(options: SearchOptions) {
         if (options.searchValue.trim() === '') return
         if (options.nocase) options.searchValue = options.searchValue.toLocaleLowerCase()
-        const result: Object[] = []
+        const result: object[] = []
         const map = this.#data.values()
         const size = this.size
         for (let index = 0; index < size; index++) {

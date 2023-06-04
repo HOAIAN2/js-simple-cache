@@ -11,17 +11,17 @@ export declare class Cache {
     get size(): number;
     get limit(): number;
     set limit(value: number);
-    set(item: Object, expiryTime?: number): void;
-    get(key: string | number | bigint): Object | undefined;
+    set(item: object, expiryTime?: number): void;
+    get(key: string | number | bigint): object | undefined;
     has(key: string | number | bigint): boolean;
     remove(key: string | number | bigint): void;
     clear(): void;
-    findKey(callback: Function): any;
-    filter(callback: Function): any[];
-    toObject(): any;
-    toArray(): Object[];
+    findKey(callback: Function): string | number | bigint | undefined;
+    filter(callback: Function): object[];
+    toObject(): object;
+    toArray(): object[];
     toJSONArray(): string;
     toJSONObject(): string;
-    search(options: SearchOptions): Object[];
+    search(options: SearchOptions): object[];
 }
 export {};

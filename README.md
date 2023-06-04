@@ -4,7 +4,7 @@ A simple caching object data base on ES6 Map() that support auto invalidate cach
 
 ## Install
 
-```
+``` console
 npm i js-simple-cache
 ```
 
@@ -53,7 +53,7 @@ const user = cache.get(1)
 console.log(user) // {userID:1, username: 'HOAI AN'}
 ```
 
-* If you using typescript and you cache object create by a class, you can use `as` like this.
+* If you using typescript and you cache object create by a class, you can casting like by using `as` like this.
 
 ```ts
 const order = cache.get(110230) as Order // Order is your class
