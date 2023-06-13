@@ -1,11 +1,14 @@
 {
   "name": "js-simple-cache",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "\"A simple caching object data base on ES6 Map() that support auto invalidate cache when reach maximum size",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "./dist"
+  ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && uglifyjs --compress -o ./dist/index.min.js --mangle -- ./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -26,5 +29,8 @@
   "dependencies": {
     "flat": "^5.0.2",
     "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "uglify-js": "^3.17.4"
   }
 }
