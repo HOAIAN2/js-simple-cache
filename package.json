@@ -5,7 +5,8 @@
   "main": "dist/index.min.js",
   "types": "dist/index.d.ts",
   "files": [
-    "./dist"
+    "./dist/index.d.ts",
+    "./dist/index.min.js"
   ],
   "scripts": {
     "build": "tsc && uglifyjs --compress -o ./dist/index.min.js --mangle -- ./dist/index.js"
